@@ -1,10 +1,7 @@
 import RPi.GPIO as GPIO
-import sys
 import time
-import os
 from asterisk.ami import AMIClient
 from asterisk.ami import SimpleAction
-
 
 # Program variables
 CallCount = 0
@@ -13,32 +10,32 @@ GPIO_PINS = [6, 5, 25, 24, 23, 22, 27, 18, 17, 4]
 # Methods
 def SequenceTest():
 	for i in GPIO_PINS:
-        	GPIO.output(i,GPIO.HIGH)
-        	time.sleep(0.1)
-        	GPIO.output(i,GPIO.LOW)
+		GPIO.output(i,GPIO.HIGH)
+		time.sleep(0.1)
+		GPIO.output(i,GPIO.LOW)
 
 def RangeTest():
 	for i in range(0,len(GPIO_PINS)+1):
 		OutputQueueCalls(i)
 		time.sleep(0.1)
-        for i in range(len(GPIO_PINS),-1,-1):
-                OutputQueueCalls(i)
-                time.sleep(0.1)
+	for i in range(len(GPIO_PINS),-1,-1):
+		OutputQueueCalls(i)
+		time.sleep(0.1)
 
 def AllOn():
 	for i in GPIO_PINS:
-        	GPIO.output(i,GPIO.HIGH)
+		GPIO.output(i,GPIO.HIGH)
 
 def AllOff():
 	for i in GPIO_PINS:
-        	GPIO.output(i,GPIO.LOW)
+		GPIO.output(i,GPIO.LOW)
 
 def OutputQueueCalls(calls):
 	if calls < 0: calls = 0
 	if calls > len(GPIO_PINS) + 1: calls = len(GPIO_PINS) + 1
 	AllOff()
 	for i in range(calls):
-                GPIO.output(GPIO_PINS[i],GPIO.HIGH)
+		GPIO.output(GPIO_PINS[i],GPIO.HIGH)
 
 def event_listener(event, **kwargs):
 	print("Event: "+ event.name)
@@ -84,15 +81,12 @@ client.add_event_listener(event_listener, white_list=['QueueStatusComplete','Que
 
 # Main Loop
 while True:
-        try:
+	try:
 		action = SimpleAction('QueueStatus', Queue='default')
 		client.send_action(action)
-
-		# OutputQueueCalls(CallCount)
 	except Exception as e:
-                print("Error setting queue calls")
+		print("Error setting queue calls")
 		print(e)
-
 	time.sleep(1)
 
 # End
