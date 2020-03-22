@@ -53,8 +53,8 @@ def event_listener(event, **kwargs):
 		return
 
 # Setup
+GPIO.setmode(GPIO.BCM)
 for i in GPIO_PINS:
-	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(i, GPIO.OUT)
 
 # Test LED
